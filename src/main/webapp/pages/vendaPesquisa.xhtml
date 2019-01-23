@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="conteudo">
+		<h:form id="formVendasPesquisa">
+
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Vendas"></h:outputText>
+				</f:facet>
+			</p:toolbar>
+
+			<h:panelGrid columns="5">
+				<p:outputLabel value="Data Inicial" />
+				<p:calendar value="#{vendaBean.filtro.dataInicial}" />
+
+				<p:outputLabel value="Data Final" />
+				<p:calendar value="#{vendaBean.filtro.dataFinal}" />
+
+				<p:commandButton value="Pesquisar"
+					actionListener="#{vendaBean.pesquisarVendas()}"
+					update=":mensagemGlobal :formVendasPesquisa:tblVendasPesquisa" />
+			</h:panelGrid>
+
+			<p:dataTable id="tblVendasPesquisa"
+				emptyMessage="Nenhum registro encontrado."
+				value="#{vendaBean.listaVendasFiltradas}" var="venda" rows="8"
+				paginator="true">
+
+				<p:column headerText="Código" style="width: 10%;">
+					<h:outputText value="#{venda.codigo}" />
+				</p:column>
+
+				<p:column headerText="Horário" style="width: 10%;">
+					<h:outputText value="#{venda.horario}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+							timeZone="America/Sao_Paulo" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Valor total" style="width: 10%;">
+					<h:outputText value="#{venda.total}">
+						<f:convertNumber pattern="0.00" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Funconário" style="width: 10%;">
+					<h:outputText value="#{venda.funcionario.nome}" />
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>

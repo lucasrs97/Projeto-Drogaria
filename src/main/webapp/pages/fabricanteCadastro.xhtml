@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="fabricante_acao" value="#{fabricanteBean.acao}" />
+			<f:viewParam name="codigoFabricante" value="#{fabricanteBean.codigoFabricante}" />
+			<f:event listener="#{fabricanteBean.carregarCadastro}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="formularioCadastro">
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Fabricantes"></h:outputText>
+				</f:facet>
+			</p:toolbar>
+
+			<h:panelGrid columns="2" id="dadosCadastro">
+				<p:outputLabel value="Código" />
+				<p:inputText size="10" readonly="true"
+					value="#{fabricanteBean.fabricanteCadastro.codigo}" />
+
+				<p:outputLabel value="Descrição" />
+				<p:inputText maxlength="50" size="30"
+					value="#{fabricanteBean.fabricanteCadastro.descricao}"
+					readonly="#{fabricanteBean.acao == 'Excluir'}">
+					<f:validateBean />
+				</p:inputText>
+			</h:panelGrid>
+
+			<h:panelGrid columns="5">
+				<p:commandButton value="Limpar"
+					actionListener="#{fabricanteBean.novo}"
+					update=":formularioCadastro:dadosCadastro"
+					rendered="#{fabricanteBean.acao == 'Novo' and autenticacaoBean.funcionarioLogado.funcao != 'Balconista'}" />
+
+				<p:commandButton value="Salvar"
+					actionListener="#{fabricanteBean.salvar}"
+					update=":mensagemGlobal :formularioCadastro:dadosCadastro"
+					rendered="#{fabricanteBean.acao == 'Novo' and autenticacaoBean.funcionarioLogado.funcao != 'Balconista'}" />
+
+				<p:button value="Voltar"
+					outcome="/pages/fabricantePesquisa.xhtml?faces-redirect=true" />
+
+				<p:commandButton value="Excluir"
+					actionListener="#{fabricanteBean.excluir}" update=":mensagemGlobal"
+					rendered="#{fabricanteBean.acao == 'Excluir' and autenticacaoBean.funcionarioLogado.funcao != 'Balconista'}" />
+
+				<p:commandButton value="Editar"
+					actionListener="#{fabricanteBean.editar}" update=":mensagemGlobal"
+					rendered="#{fabricanteBean.acao == 'Editar'  and autenticacaoBean.funcionarioLogado.funcao != 'Balconista'}" />
+			</h:panelGrid>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+
+</html>
